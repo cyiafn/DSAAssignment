@@ -226,33 +226,45 @@ int main()
 		else if (option == 6)
 		{
 			string item;
-			cout << "Please enter the item you want to delete: " << endl;
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			getline(cin, item);
-			if (item == "")
+			if (mainList.empty())
 			{
-				cout << "Invalid input!" << endl;
+				cout << "There is nothing in the tree!" << endl;
 			}
 			else
 			{
-				TreapNode *tempNode = treap.search(treap.root, item);
-				if (tempNode == NULL)
+				for (int i = 0; i < mainList.size(); i++)
 				{
-					cout << "There is no item with that name." << endl;
+					cout << "Name: " << mainList[i].name << "Description: " << mainList[i].description << "Price: $" << mainList[i].price << "Hit Count: " << mainList[i].hitcount << endl;
+				}
+				cout << "Please enter the item you want to delete: " << endl;
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				getline(cin, item);
+				if (item == "")
+				{
+					cout << "Invalid input!" << endl;
 				}
 				else
 				{
-					treap.root = treap.deleteNode(treap.root, item);
-					for (int i = 0; i < mainList.size(); i++)
+					TreapNode *tempNode = treap.search(treap.root, item);
+					if (tempNode == NULL)
 					{
-						if (mainList[i].name == item)
-						{
-							mainList.erase(mainList.begin() + i);
-						}
+						cout << "There is no item with that name." << endl;
 					}
-					cout << "Item deleted.";
+					else
+					{
+						treap.root = treap.deleteNode(treap.root, item);
+						for (int i = 0; i < mainList.size(); i++)
+						{
+							if (mainList[i].name == item)
+							{
+								mainList.erase(mainList.begin() + i);
+							}
+						}
+						cout << "Item deleted.";
+					}
 				}
 			}
+			
 
 
 		}
@@ -271,28 +283,29 @@ int main()
 			else
 			{
 				cout << "Please enter the description of the item you want to insert: " << endl;
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				getline(cin, description);
 				cout << "Please enter the price of the item you want to insert: " << endl;
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				getline(cin, priceString);
 				price = atof(priceString.c_str());
 				cout << "Please enter the hitcount of the item you want to insert" << endl;
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				getline(cin, hitcountString);
 				hitcount = atof(hitcountString.c_str());
 				treap.root = treap.insert(treap.root, name, description, price, hitcount);
-				cout << "Item " << name << " inserted successfully.";
+				cout << "Item " << name << " inserted successfully." << endl;
 				mainList.push_back(treapNode(name, description, price, hitcount));
 			}
 			
 		}
-		else if (option == 9)
+		else if (option == 8)
 		{
 			
 
 			treap.inorder(treap.root);
 
+		}
+		else if (option == 0)
+		{
+			continue;
 		}
 		else
 		{
@@ -315,6 +328,7 @@ void displayMenu()
 	cout << "5. Save data to a file" << endl;
 	cout << "6. Delete an item." << endl;
 	cout << "7. Insert an item." << endl;
+	cout << "8. Display the nodes in the tree." << endl;
 	cout << "0. Exit" << endl;
 	cout << "Please enter your option: " << endl;
 }
