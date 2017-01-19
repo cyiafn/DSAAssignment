@@ -1,0 +1,8 @@
+﻿  stdafx.cpp
+  Treap.cpp
+  Queue.cpp
+  DSAAssignment.cpp
+c:\users\seanm_000\source\repos\dsaassignment\dsaassignment\dsaassignment.cpp(92): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\seanm_000\source\repos\dsaassignment\dsaassignment\dsaassignment.cpp(98): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
+  DSAAssignment.vcxproj -> C:\Users\seanm_000\Source\Repos\DSAAssignment\x64\Debug\DSAAssignment.exe
