@@ -299,8 +299,12 @@ int main()
 		else if (option == 8)
 		{
 			
-
-			treap.inorder(treap.root);
+			if (mainList.empty())
+			{
+				cout << "There is nothing in the tree!" << endl;
+			}
+			else
+				treap.inorder(treap.root);
 
 		}
 		else if (option == 0)
