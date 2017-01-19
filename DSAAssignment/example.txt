@@ -1,0 +1,10 @@
+League Of Legend;MOBA;10;100
+Halo;FPS;80;69
+DOTA2;MOBA;30;100
+DOTA;MOBA;0.00;20
+Team Fortress2;FPS;30.00;90
+Generals;RTS;20.00;30
+Call Of Duty;FPS;80.00;60
+Clash Royale;RTS;20.00;80
+Rise of the Tomb Raider;3P;40.00;40
+Warcraft;MMORPG;50.00;70
