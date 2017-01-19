@@ -1,0 +1,5 @@
+﻿  DSAAssignment.cpp
+c:\users\cheny\source\repos\dsaassignment\dsaassignment\dsaassignment.cpp(92): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\cheny\source\repos\dsaassignment\dsaassignment\dsaassignment.cpp(98): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  DSAAssignment.vcxproj -> C:\Users\cheny\Source\Repos\DSAAssignment\x64\Debug\DSAAssignment.exe
+  DSAAssignment.vcxproj -> C:\Users\cheny\Source\Repos\DSAAssignment\x64\Debug\DSAAssignment.pdb (Full PDB)
