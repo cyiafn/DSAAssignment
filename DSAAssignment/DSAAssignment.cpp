@@ -142,6 +142,7 @@ int main()
 		}
 		else if (option == 3)
 		{
+			int count = 0;
 			vector<TreapNode> nodeList;
 			nodeList = mainList;
 			cout << "Names arranged in ascending order!" << endl;
@@ -160,7 +161,8 @@ int main()
 			}/*/
 			for (int i = 0; i < mainList.size(); i++)
 			{
-				cout << "Name: " << nodeList[i].name << ", Description: " << nodeList[i].description << ", Price: " << nodeList[i].price << ", Hitcounts: " << nodeList[i].hitcount << endl;
+				count++;
+				cout << count << ". Name: " << nodeList[i].name << ", Description: " << nodeList[i].description << ", Price: " << nodeList[i].price << ", Hitcounts: " << nodeList[i].hitcount << endl;
 			}
 		}
 		else if (option == 4)
