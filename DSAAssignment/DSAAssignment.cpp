@@ -8,6 +8,8 @@
 #include "Treap.h"
 #include "TreapNode.h"
 #include "Queue.h"
+#include <cstdlib>
+#include <cerrno>
 using namespace std;
 
 
@@ -39,8 +41,8 @@ int main()
 		{
 			string path, line, segment, name, description;
 			double price;
-			int hitcount, dataType = 0;
-			vector<string> seglist;
+			int hitcount, dataType = 0, failedInsert = 0;
+			vector<string> seglist, failedList;
 			cout << "Please enter the file path for the file you would like to load (use \\\\ to sperate folders): " << endl;
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			getline(cin, path);
@@ -90,14 +92,34 @@ int main()
 							if (seglist[i].find("\n") != string::npos)
 							{
 								hitcount = atof(seglist[i].substr(0, seglist[i].find("\n")).c_str());
-								treap.root = treap.insert(treap.root, name, description, price, hitcount);
-								mainList.push_back(treapNode(name, description, price, hitcount));
+								TreapNode *tempNode = treap.search(treap.root, name);
+								if (tempNode != NULL)
+								{
+									failedInsert++;
+									failedList.push_back(name);
+								}
+								else
+								{
+									treap.root = treap.insert(treap.root, name, description, price, hitcount);
+									mainList.push_back(treapNode(name, description, price, hitcount));
+								}
+								
 							}
 							else
 							{
 								hitcount = atof(seglist[i].c_str());
-								treap.root = treap.insert(treap.root, name, description, price, hitcount);
-								mainList.push_back(treapNode(name, description, price, hitcount));
+								TreapNode *tempNode = treap.search(treap.root, name);
+								if (tempNode != NULL)
+								{
+									failedInsert++;
+									failedList.push_back(name);
+								}
+								else
+								{
+									treap.root = treap.insert(treap.root, name, description, price, hitcount);
+									mainList.push_back(treapNode(name, description, price, hitcount));
+								}
+								
 							}
 							if (seglist[i].find("\n") != string::npos)
 							{
@@ -108,7 +130,33 @@ int main()
 								dataType = 0;
 						}
 					}
-					cout << "File load success!" << endl;
+					if (failedInsert > 0)
+					{
+						string see;
+						cout << "File load was a success but there were " << failedInsert << " items that were identical and failed to insert. Would you like to see their names? (y/n): " << endl;
+						cin >> see;
+						if (see == "y" || see == "Y" || see == "yes" || see == "YES" || see == "Yes")
+						{
+							for (int i = 0; i < failedList.size(); i++)
+							{
+								cout << failedList[i] << endl;
+							}
+							cout << "These are the failed duplicate entries." << endl;
+						}
+						else if (see == "n" || see == "N" || see == "No" || see == "no" || see == "NO")
+						{
+							cout << "Alright, exiting this function" << endl;
+						}
+						else
+						{
+							cout << "Invalid input, exiting the function" << endl;
+						}
+					}
+					else
+					{
+						cout << "File load success!" << endl;
+					}
+					failedList.erase(failedList.begin(), failedList.end());
 				}
 				
 			}
@@ -191,39 +239,47 @@ int main()
 		}
 		else if (option == 5)
 		{
-			string path;
-			ofstream myFile;
-			cout << "Please enter the file path for the file you would like to write to (use \\ to sperate folders, start with \\ if in root): " << endl;
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			getline(cin, path);
-			if (path.at(0) == '\\')
+			if (treap.root == NULL)
 			{
-				path.erase(0, 2);
-			}
-			if (myFile.fail() == true)
-			{
-				cout << "File load failed.";
+				cout << "There is no data to be saved!" << endl;
 			}
 			else
 			{
-				myFile.open(path);
-				/*/while (mainList.empty() == false)
+				string path;
+				ofstream myFile;
+				cout << "Please enter the file path for the file you would like to write to (use \\\\ to sperate folders): " << endl;
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				getline(cin, path);
+				if (path.at(0) == '\\')
 				{
+					path.erase(0, 2);
+				}
+				if (myFile.fail() == true)
+				{
+					cout << "File load failed.";
+				}
+				else
+				{
+					myFile.open(path);
+					/*/while (mainList.empty() == false)
+					{
 					TreapNode treapNode = queue.dequeue();
 					secondQueue.enqueue(treapNode);
 					myFile << treapNode.name << ";" << treapNode.description << ";" << treapNode.price << "; " << treapNode.hitcount << "\n";
-				}
-				while (secondQueue.isEmpty() == false)
-				{
+					}
+					while (secondQueue.isEmpty() == false)
+					{
 					TreapNode treapNode = secondQueue.dequeue();
 					queue.enqueue(treapNode);
-				}/*/
-				for (int i = 0; i < mainList.size(); i++)
-				{
-					myFile << mainList[i].name << ";" << mainList[i].description << ";" << mainList[i].price << "; " << mainList[i].hitcount << "\n";
+					}/*/
+					for (int i = 0; i < mainList.size(); i++)
+					{
+						myFile << mainList[i].name << ";" << mainList[i].description << ";" << mainList[i].price << "; " << mainList[i].hitcount << "\n";
+					}
+					cout << "Written Successfully to file!" << endl;
 				}
-				cout << "Written Successfully to file!" << endl;
 			}
+			
 		}
 		else if (option == 6)
 		{
@@ -262,7 +318,7 @@ int main()
 								mainList.erase(mainList.begin() + i);
 							}
 						}
-						cout << "Item deleted.";
+						cout << "Item deleted." << endl;
 					}
 				}
 			}
@@ -286,12 +342,30 @@ int main()
 			{
 				cout << "Please enter the description of the item you want to insert: " << endl;
 				getline(cin, description);
-				cout << "Please enter the price of the item you want to insert: " << endl;
-				getline(cin, priceString);
-				price = atof(priceString.c_str());
+				cout << "Please enter the price of the item you want to insert (Do not enter $ symbol): " << endl;
+				cin >> price;
+				while (!cin || price < 0)
+				{
+					cin.clear();
+					cin.ignore(std::numeric_limits < std::streamsize>::max(), '\n');
+					cout << "You have entered an invalid price!" << endl;
+					cout << "Please enter the price of the item you want to insert(Do not enter $ symbol): " << endl;
+					cin >> price;
+				}
+				//getline(cin, priceString);
+				//price = atof(priceString.c_str());
 				cout << "Please enter the hitcount of the item you want to insert" << endl;
-				getline(cin, hitcountString);
-				hitcount = atof(hitcountString.c_str());
+				cin >> hitcount;
+				while (!cin || hitcount < 0)
+				{
+					cin.clear();
+					cin.ignore(std::numeric_limits < std::streamsize>::max(), '\n');
+					cout << "You have entered an invalid hitcount!" << endl;
+					cout << "Please enter the hitcount of the item you want to insert: " << endl;
+					cin >> hitcount;
+				}
+				//getline(cin, hitcountString);
+				//hitcount = atof(hitcountString.c_str());
 				treap.root = treap.insert(treap.root, name, description, price, hitcount);
 				cout << "Item " << name << " inserted successfully." << endl;
 				mainList.push_back(treapNode(name, description, price, hitcount));
@@ -311,7 +385,7 @@ int main()
 		}
 		else if (option == 0)
 		{
-			continue;
+			break;
 		}
 		else
 		{
