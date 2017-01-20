@@ -292,7 +292,7 @@ int main()
 			{
 				for (int i = 0; i < mainList.size(); i++)
 				{
-					cout << "Name: " << mainList[i].name << "Description: " << mainList[i].description << "Price: $" << mainList[i].price << "Hit Count: " << mainList[i].hitcount << endl;
+					cout << "Name: " << mainList[i].name << ", Description: " << mainList[i].description << ", Price: $" << mainList[i].price << ", Hit Count: " << mainList[i].hitcount << endl;
 				}
 				cout << "Please enter the item you want to delete: " << endl;
 				cin.ignore(numeric_limits<streamsize>::max(), '\n');
